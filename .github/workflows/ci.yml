@@ -21,3 +21,26 @@ jobs:
 
     - name: "npm run test"
       run: npm run test
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Run clippy-check action (expected pass)
+      uses: actions-rs/clippy-check@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        args: --manifest-path test_clippy/Cargo.toml -- -A clippy::approx_constant
+
+    - name: Run clippy-check action (expected fail)
+      continue-on-error: true
+      id: clippy_fail
+      # uses: ./
+      uses: actions-rs/clippy-check@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        args: --manifest-path test_clippy/Cargo.toml
+
+    - name: Verify failure of previous step
+      if: steps.clippy_fail.outcome != 'failure'
+      run: echo "::error::Clippy passed when it should have failed" && exit 1
