@@ -29,6 +29,7 @@ jobs:
     - name: Run clippy-check action (expected pass)
       uses: ./
       with:
+        token: ${{ secrets.GITHUB_TOKEN }}
         args: --manifest-path test_clippy/Cargo.toml -- -A clippy::approx_constant
 
     - name: Run clippy-check action (expected fail)
@@ -36,6 +37,7 @@ jobs:
       id: clippy_fail
       uses: ./
       with:
+        token: ${{ secrets.GITHUB_TOKEN }}
         args: --manifest-path test_clippy/Cargo.toml
 
     - name: Verify failure of previous step
