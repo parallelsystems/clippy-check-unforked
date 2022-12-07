@@ -162,7 +162,7 @@ See https://github.com/actions-rs/clippy-check/issues/2 for details.`);
     }
 
     private async createCheck(client: any, options: CheckOptions): Promise<number> {
-        const response = await client.checks.create({
+        const response = await client.rest.checks.create({
             owner: options.owner,
             repo: options.repo,
             name: options.name,
